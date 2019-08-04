@@ -42,5 +42,10 @@ int main() {
 	std::cout << "[INFO] hash_pair<ap32, murmur32> = " << std::get<0>(hashp)
 	          << ", " << std::get<1>(hashp) << std::endl;
 
+	std::cout << "[INFO] wyhash64 = "
+	          << cpphash::compute(cpphash::general::wyhash64{}, text.data(),
+	                              text.length())
+	          << std::endl;
+
 	return 0;
 }

@@ -22,7 +22,7 @@ struct murmur128_tag {};
 struct ap32_tag {};
 struct fnv1a32_tag {};
 struct fnv1a64_tag {};
-struct md5_tag {};
+struct wyhash64_tag {};
 } // namespace general
 
 namespace crypto {}

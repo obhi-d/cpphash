@@ -15,6 +15,7 @@ set(CPPHASH_INCLUDE_BUILD_DIR "${PROJECT_SOURCE_DIR}/include")
 ##
 ## TARGET
 ##
+message("Target name: ${CPPHASH_TARGET_NAME}")
 add_library(${CPPHASH_TARGET_NAME} INTERFACE)
 add_library(${PROJECT_NAME}::${CPPHASH_TARGET_NAME} ALIAS ${CPPHASH_TARGET_NAME})
 target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_17)
@@ -30,6 +31,12 @@ target_include_directories(
     ${CPPHASH_TARGET_NAME}
     INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
+)
+
+target_include_directories(
+    ${CPPHASH_TARGET_NAME}
+    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/external/wyhash>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/wyhash>
 )
 
 ##
@@ -73,3 +80,4 @@ install(FILES "${PROJECT_BINARY_DIR}/${PROJECT_NAME}Config.cmake"
         DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}/cmake)
 
 install(DIRECTORY include DESTINATION .)
+install(FILES external/wyhash/wyhash.h DESTINATION include/wyhash)

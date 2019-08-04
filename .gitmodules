@@ -1,0 +1,3 @@
+[submodule "external/wyhash"]
+	path = external/wyhash
+	url = https://github.com/wangyi-fudan/wyhash.git
