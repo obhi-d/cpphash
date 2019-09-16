@@ -11,26 +11,26 @@ template <> struct context<general::wyhash64_tag> {
 	};
 };
 
-result_t<general::wyhash64_tag> compute(general::wyhash64_tag,
+inline result_t<general::wyhash64_tag> compute(general::wyhash64_tag,
                                         const void* source, std::size_t len) {
 	context_t<general::wyhash64_tag> storage;
 	return wyhash(source, len, storage.hash);
 }
 
 // Retrieve hash stored in incremental hash computation
-result_t<general::wyhash64_tag> get(
+inline result_t<general::wyhash64_tag> get(
     const context_t<general::wyhash64_tag>& object) {
 	return object.hash;
 }
 
 // Compute hash incrementally
 template <typename value_type>
-void append(context_t<general::wyhash64_tag>& object, const value_type& value) {
+inline void append(context_t<general::wyhash64_tag>& object, const value_type& value) {
 	object.hash =
 	    wyhash64(object.hash, wyhash(&value, sizeof(value), 0xaaaaaaaa));
 }
 
-void append(context_t<general::wyhash64_tag>& object, const void* source,
+inline void append(context_t<general::wyhash64_tag>& object, const void* source,
             std::size_t len) {
 	object.hash = wyhash64(object.hash, wyhash(source, len, 0xaaaaaaaa));
 }

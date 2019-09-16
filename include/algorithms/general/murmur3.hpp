@@ -282,7 +282,7 @@ FORCE_INLINE void murmur3_hash(context_t<general::murmur128_tag>& last,
 } // namespace details
 } // namespace general
 
-result_t<general::murmur32_tag> compute(general::murmur32_tag,
+inline result_t<general::murmur32_tag> compute(general::murmur32_tag,
                                         const void* source, std::size_t len) {
 	context_t<general::murmur32_tag> storage;
 	general::details::murmur3_context(source, len, storage);
@@ -290,23 +290,23 @@ result_t<general::murmur32_tag> compute(general::murmur32_tag,
 }
 
 // Retrieve hash stored in incremental hash computation
-result_t<general::murmur32_tag> get(
+inline result_t<general::murmur32_tag> get(
     const context_t<general::murmur32_tag>& object) {
 	return general::details::murmur3_finalize(object);
 }
 
 // Compute hash incrementally
 template <typename value_type>
-void append(context_t<general::murmur32_tag>& object, const value_type& value) {
+inline void append(context_t<general::murmur32_tag>& object, const value_type& value) {
 	general::details::murmur3_hash(object, value);
 }
 
-void append(context_t<general::murmur32_tag>& object, const void* source,
+inline void append(context_t<general::murmur32_tag>& object, const void* source,
             std::size_t len) {
 	general::details::murmur3_context(source, len, object);
 }
 
-result_t<general::murmur128_tag> compute(cpphash::general::murmur128_tag,
+inline result_t<general::murmur128_tag> compute(cpphash::general::murmur128_tag,
                                          const void* source, std::size_t len) {
 	context_t<general::murmur128_tag> storage;
 	general::details::murmur3_context(source, len, storage);
@@ -314,19 +314,19 @@ result_t<general::murmur128_tag> compute(cpphash::general::murmur128_tag,
 }
 
 // Retrieve hash stored in incremental hash computation
-result_t<general::murmur128_tag> get(
+inline result_t<general::murmur128_tag> get(
     const context_t<general::murmur128_tag>& object) {
 	return general::details::murmur3_finalize(object);
 }
 
 // Compute hash incrementally
 template <typename value_type>
-void append(context_t<general::murmur128_tag>& object,
+inline void append(context_t<general::murmur128_tag>& object,
             const value_type& value) {
 	general::details::murmur3_hash(object, value);
 }
 
-void append(context_t<general::murmur128_tag>& object, const void* source,
+inline void append(context_t<general::murmur128_tag>& object, const void* source,
             std::size_t len) {
 	general::details::murmur3_context(source, len, object);
 }

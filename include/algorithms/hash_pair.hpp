@@ -25,7 +25,7 @@ struct is_hash_pair_tag<
 } // namespace details
 
 template <typename hash_pair_type_tag>
-std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
+inline std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
                  result_t<hash_pair_type_tag>>
 compute(hash_pair_type_tag, const void* source, std::size_t len) {
 	result_t<hash_pair_type_tag> output;
@@ -38,7 +38,7 @@ compute(hash_pair_type_tag, const void* source, std::size_t len) {
 
 // Retrieve hash stored in incremental hash computation
 template <typename hash_pair_type_tag>
-std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
+inline std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
                  result_t<hash_pair_type_tag>>
 get(hash_pair_type_tag, const context_t<hash_pair_type_tag>& object) {
 	result_t<hash_pair_type_tag> output;
@@ -53,7 +53,7 @@ get(hash_pair_type_tag, const context_t<hash_pair_type_tag>& object) {
 
 // Compute hash incrementally
 template <typename hash_pair_type_tag, typename value_type>
-std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
+inline std::enable_if_t<details::is_hash_pair_tag<hash_pair_type_tag>::value,
                  std::void_t<hash_pair_type_tag>>
 append(hash_pair_type_tag, context_t<hash_pair_type_tag>& object,
        const value_type& value) {

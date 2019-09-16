@@ -50,7 +50,7 @@ static inline result_t<general::ap32_tag> get(
 
 // Compute hash incrementally
 template <typename value_type>
-void append(context_t<general::ap32_tag>& object, const value_type& value) {
+static inline void append(context_t<general::ap32_tag>& object, const value_type& value) {
 	general::details::ap32_hash(object, value);
 }
 
