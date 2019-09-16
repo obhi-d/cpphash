@@ -35,8 +35,7 @@ target_include_directories(
 
 target_include_directories(
     ${CPPHASH_TARGET_NAME}
-    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/external/wyhash>
-    $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/wyhash>
+    INTERFACE $<BUILD_INTERFACE:${${PROJECT_NAME}_SOURCE_DIR}/external>
 )
 
 ##

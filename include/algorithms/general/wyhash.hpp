@@ -1,6 +1,6 @@
 #pragma once
 #include "../cpphash_base_types.hpp"
-#include <wyhash.h>
+#include <wyhash/wyhash.h>
 namespace cpphash {
 template <> struct result<general::wyhash64_tag> {
 	using type = std::uint64_t;
