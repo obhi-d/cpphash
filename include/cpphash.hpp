@@ -2,6 +2,7 @@
     \brief cpphash
     Usage guidelines are provided.
  */
+#pragma once
 
 #include <algorithms/general/ap32.hpp>
 #include <algorithms/general/fnv1a.hpp>

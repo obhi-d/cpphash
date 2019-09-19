@@ -1,3 +1,4 @@
+#pragma once
 
 #include "../cpphash_base_types.hpp"
 #include <cstdint>
