@@ -8,6 +8,9 @@
 #include <algorithms/general/murmur3.hpp>
 #include <algorithms/general/wyhash.hpp>
 
+#include <algorithms/cth/fnv1a.hpp>
+#include <algorithms/cth/murmur3.hpp>
+
 #include <algorithms/hash_pair.hpp>
 
 // The declarations in this file are for reference
@@ -21,12 +24,12 @@ using hash_pair = hash_pair_tag<first, second>;
 
 namespace general {
 // Valid tags
-using murmur32  = murmur32_tag;
-using murmur128 = murmur128_tag;
-using ap32      = ap32_tag;
-using fnv1a32   = fnv1a32_tag;
-using fnv1a64   = fnv1a64_tag;
-using wyhash64  = wyhash64_tag;
+using murmur32_seed  = murmur32;
+using murmur128_seed = murmur128;
+using ap32_seed      = ap32;
+using fnv1a32_seed   = fnv1a32;
+using fnv1a64_seed   = fnv1a64;
+using wyhash64_seed  = wyhash64;
 
 } // namespace general
 

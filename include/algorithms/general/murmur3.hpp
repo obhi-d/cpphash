@@ -12,12 +12,10 @@
 
 namespace cpphash {
 
-template <> struct result<general::murmur32_tag> {
-	using type = std::uint32_t;
-};
-template <> struct result<general::murmur128_tag> { using type = uhash128_t; };
+template <> struct result<general::murmur32> { using type = std::uint32_t; };
+template <> struct result<general::murmur128> { using type = uhash128_t; };
 
-template <> struct context<general::murmur32_tag> {
+template <> struct context<general::murmur32> {
 	struct type {
 		std::uint32_t len = 0;
 		// TODO: allow for randomizing seed
@@ -25,7 +23,7 @@ template <> struct context<general::murmur32_tag> {
 	};
 };
 
-template <> struct context<general::murmur128_tag> {
+template <> struct context<general::murmur128> {
 	struct type {
 		std::uint64_t len = 0;
 		// TODO: allow for randomizing seed
@@ -35,7 +33,7 @@ template <> struct context<general::murmur128_tag> {
 
 namespace general {
 
-namespace details {
+namespace detail {
 
 //-----------------------------------------------------------------------------
 // Platform-specific functions and macros
@@ -107,13 +105,13 @@ FORCE_INLINE uint64_t fmix64(uint64_t k) {
 
 //-----------------------------------------------------------------------------
 FORCE_INLINE std::uint32_t murmur3_finalize(
-    const context_t<general::murmur32_tag>& value) {
+    const context_t<general::murmur32>& value) {
 	std::uint32_t result = value.hash ^ value.len;
 	return fmix32(result);
 }
 
 FORCE_INLINE uhash128_t
-murmur3_finalize(const context_t<general::murmur128_tag>& value) {
+murmur3_finalize(const context_t<general::murmur128>& value) {
 	uhash128_t p   = uhash128_t(std::get<0>(value.hash) ^ value.len,
                             std::get<1>(value.hash) ^ value.len);
 	std::get<0>(p) = fmix64(std::get<0>(p));
@@ -122,9 +120,9 @@ murmur3_finalize(const context_t<general::murmur128_tag>& value) {
 }
 
 inline void murmur3_context(const void* key, std::size_t len,
-                            context_t<general::murmur32_tag>& last) {
-	const uint8_t* data = (const uint8_t*)key;
-	const long nblocks  = static_cast<long>(len / 4);
+                            context_t<general::murmur32>& last) {
+	const uint8_t* data        = (const uint8_t*)key;
+	const std::int32_t nblocks = static_cast<std::int32_t>(len / 4);
 
 	std::uint32_t h1 = last.hash;
 
@@ -136,7 +134,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 
 	const std::uint32_t* blocks = (const std::uint32_t*)(data + nblocks * 4);
 
-	for (long i = -nblocks; i; i++) {
+	for (std::int32_t i = -nblocks; i; i++) {
 		std::uint32_t k1 = getblock32(blocks, i);
 
 		k1 *= c1;
@@ -173,7 +171,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 }
 
 inline void murmur3_context(const void* key, std::size_t len,
-                            context_t<general::murmur128_tag>& last) {
+                            context_t<general::murmur128>& last) {
 
 	const std::uint8_t* data = (const std::uint8_t*)key;
 	const long nblocks       = static_cast<long>(len / 16);
@@ -267,67 +265,70 @@ inline void murmur3_context(const void* key, std::size_t len,
 /// MURMUR3
 
 template <typename T>
-FORCE_INLINE void murmur3_hash(context_t<general::murmur32_tag>& last,
+FORCE_INLINE void murmur3_hash(context_t<general::murmur32>& last,
                                const T& mem) {
 	const std::uint8_t* values = reinterpret_cast<const std::uint8_t*>(&mem);
 	murmur3_context(values, sizeof(T), last);
 }
 
 template <typename T>
-FORCE_INLINE void murmur3_hash(context_t<general::murmur128_tag>& last,
+FORCE_INLINE void murmur3_hash(context_t<general::murmur128>& last,
                                const T& mem) {
 	const std::uint8_t* values = reinterpret_cast<const std::uint8_t*>(&mem);
 	murmur3_context(values, sizeof(T), last);
 }
-} // namespace details
+} // namespace detail
 } // namespace general
 
-inline result_t<general::murmur32_tag> compute(general::murmur32_tag,
-                                        const void* source, std::size_t len) {
-	context_t<general::murmur32_tag> storage;
-	general::details::murmur3_context(source, len, storage);
-	return general::details::murmur3_finalize(storage);
+inline result_t<general::murmur32> compute(general::murmur32 seed,
+                                           const void* source,
+                                           std::size_t len) {
+	context_t<general::murmur32> storage = {0, seed.seed};
+	general::detail::murmur3_context(source, len, storage);
+	return general::detail::murmur3_finalize(storage);
 }
 
 // Retrieve hash stored in incremental hash computation
-inline result_t<general::murmur32_tag> get(
-    const context_t<general::murmur32_tag>& object) {
-	return general::details::murmur3_finalize(object);
+inline result_t<general::murmur32> get(
+    const context_t<general::murmur32>& object) {
+	return general::detail::murmur3_finalize(object);
 }
 
 // Compute hash incrementally
 template <typename value_type>
-inline void append(context_t<general::murmur32_tag>& object, const value_type& value) {
-	general::details::murmur3_hash(object, value);
+inline void append(context_t<general::murmur32>& object,
+                   const value_type& value) {
+	general::detail::murmur3_hash(object, value);
 }
 
-inline void append(context_t<general::murmur32_tag>& object, const void* source,
-            std::size_t len) {
-	general::details::murmur3_context(source, len, object);
+inline void append(context_t<general::murmur32>& object, const void* source,
+                   std::size_t len) {
+	general::detail::murmur3_context(source, len, object);
 }
 
-inline result_t<general::murmur128_tag> compute(cpphash::general::murmur128_tag,
-                                         const void* source, std::size_t len) {
-	context_t<general::murmur128_tag> storage;
-	general::details::murmur3_context(source, len, storage);
-	return general::details::murmur3_finalize(storage);
+inline result_t<general::murmur128> compute(cpphash::general::murmur128 seed,
+                                            const void* source,
+                                            std::size_t len) {
+	context_t<general::murmur128> storage = {0, {seed.seedh, seed.seedl}};
+	general::detail::murmur3_context(source, len, storage);
+	return general::detail::murmur3_finalize(storage);
 }
 
 // Retrieve hash stored in incremental hash computation
-inline result_t<general::murmur128_tag> get(
-    const context_t<general::murmur128_tag>& object) {
-	return general::details::murmur3_finalize(object);
+inline result_t<general::murmur128> get(
+    const context_t<general::murmur128>& object) {
+	return general::detail::murmur3_finalize(object);
 }
 
 // Compute hash incrementally
 template <typename value_type>
-inline void append(context_t<general::murmur128_tag>& object,
-            const value_type& value) {
-	general::details::murmur3_hash(object, value);
+inline void append(context_t<general::murmur128>& object,
+                   const value_type& value) {
+	general::detail::murmur3_hash(object, value);
 }
 
-inline void append(context_t<general::murmur128_tag>& object, const void* source,
-            std::size_t len) {
-	general::details::murmur3_context(source, len, object);
+inline void append(context_t<general::murmur128>& object, const void* source,
+                   std::size_t len) {
+	general::detail::murmur3_context(source, len, object);
 }
 } // namespace cpphash

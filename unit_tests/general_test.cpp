@@ -2,7 +2,11 @@
 #include <cassert>
 #include <cpphash.hpp>
 #include <iostream>
-
+template<std::uint32_t N>
+						struct printer
+						{
+								printer() { std::cout << N << std::endl; }
+						};
 int main() {
 
 	std::string text =
@@ -45,6 +49,26 @@ int main() {
 	std::cout << "[INFO] wyhash64 = "
 	          << cpphash::compute(cpphash::general::wyhash64{}, text.data(),
 	                              text.length())
+	          << std::endl;
+
+#define CPPHASH_CTH_STR_VAL "This is a long winded string test for const hash"
+	std::string compile_time_test = CPPHASH_CTH_STR_VAL;
+	std::cout << "[INFO] murmur32 validation with cth = "
+	          << cpphash::compute(cpphash::general::murmur32{},
+	                              compile_time_test.data(),
+	                              compile_time_test.length())
+	          << " vs "
+	          << cpphash::cth::compute(cpphash::cth::murmur32{},
+	                                   CPPHASH_CTH_STR_VAL)
+	          << std::endl;
+
+	std::cout << "[INFO] fnv1a32 validation with cth = "
+	          << cpphash::compute(cpphash::general::fnv1a32{},
+	                              compile_time_test.data(),
+	                              compile_time_test.length())
+	          << " vs "
+	          << cpphash::cth::compute(cpphash::cth::fnv1a32{},
+	                                   CPPHASH_CTH_STR_VAL)
 	          << std::endl;
 
 	return 0;
