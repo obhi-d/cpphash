@@ -11,6 +11,7 @@
 
 #include <algorithms/cth/fnv1a.hpp>
 #include <algorithms/cth/murmur3.hpp>
+#include <algorithms/cth/typehash.hpp>
 
 #include <algorithms/hash_pair.hpp>
 

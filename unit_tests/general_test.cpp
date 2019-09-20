@@ -2,11 +2,9 @@
 #include <cassert>
 #include <cpphash.hpp>
 #include <iostream>
-template<std::uint32_t N>
-						struct printer
-						{
-								printer() { std::cout << N << std::endl; }
-						};
+template <std::uint32_t N> struct printer {
+	printer() { std::cout << N << std::endl; }
+};
 int main() {
 
 	std::string text =
@@ -69,6 +67,17 @@ int main() {
 	          << " vs "
 	          << cpphash::cth::compute(cpphash::cth::fnv1a32{},
 	                                   CPPHASH_CTH_STR_VAL)
+	          << std::endl;
+
+	std::cout << "[INFO] type name: "
+	          << cpphash::cth::type_name<cpphash::general::fnv1a32>()
+	          << " and hash: "
+	          << cpphash::cth::type_hash<cpphash::general::fnv1a32>()
+	          << std::endl;
+	std::cout << "[INFO] type name: "
+	          << cpphash::cth::type_name<cpphash::general::murmur32>()
+	          << " and hash: "
+	          << cpphash::cth::type_hash<cpphash::general::murmur32>()
 	          << std::endl;
 
 	return 0;
