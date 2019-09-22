@@ -15,7 +15,7 @@ struct const_string_m3 {
 	}
 
 	constexpr uint32_t get_block(int idx) const {
-		int i       = (block_size() + idx) * 4;
+		int i       = (static_cast<int>(block_size()) + idx) * 4;
 		uint32_t b0 = p[i];
 		uint32_t b1 = p[i + 1];
 		uint32_t b2 = p[i + 2];
@@ -39,7 +39,7 @@ struct const_string_m3 {
 		const std::uint32_t c2 = 0x1b873593;
 
 		const std::int32_t nblocks = static_cast<std::int32_t>(block_size());
-		for (std::size_t i = -nblocks; i; i++) {
+		for (std::int32_t i = -nblocks; i; i++) {
 			std::uint32_t k1 = get_block(i);
 
 			k1 *= c1;

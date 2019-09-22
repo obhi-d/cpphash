@@ -2,6 +2,8 @@
 
 #include "../cpphash_base_types.hpp"
 #include <cstdint>
+#include <stdexcept>
+
 namespace cpphash {
 namespace cth {
 namespace detail {

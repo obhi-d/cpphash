@@ -48,7 +48,7 @@ struct const_string_typeh {
 	constexpr std::uint32_t hash() const { return compute(p, sz - 1); }
 
 	static constexpr std::uint32_t compute(char const* const s,
-	                                       std::size_t count) {
+	                                       std::int32_t count) {
 		return ((count ? compute(s, count - 1) : 2166136261u) ^
 		        static_cast<std::uint8_t>(s[count])) *
 		       16777619u;
@@ -68,8 +68,7 @@ template <typename T> constexpr detail::const_string_typeh type_name() {
 }
 
 template <typename T> constexpr std::uint32_t type_hash() {
-	return detail::const_string_typeh{CPPHASH_FUNC_NAME}
-	    .substring(CPPHASH_FUNC_START, CPPHASH_FUNC_END)
+	return type_name<T>()
 	    .hash();
 }
 } // namespace detail
