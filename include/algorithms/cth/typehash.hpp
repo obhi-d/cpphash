@@ -45,7 +45,7 @@ struct const_string_typeh {
 	                                       const std::size_t end) const {
 		return const_string_typeh(p + start, size() - (end + start));
 	}
-	constexpr std::uint32_t hash() const { return compute(p, sz - 1); }
+	constexpr std::uint32_t hash() const { return compute(p, static_cast<int>(sz - 1)); }
 
 	static constexpr std::uint32_t compute(char const* const s,
 	                                       std::int32_t count) {

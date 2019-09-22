@@ -123,6 +123,7 @@ inline void murmur3_context(const void* key, std::size_t len,
                             context_t<general::murmur32>& last) {
 	const uint8_t* data        = (const uint8_t*)key;
 	const std::int32_t nblocks = static_cast<std::int32_t>(len / 4);
+	const std::size_t len4     = static_cast<std::size_t>(nblocks) * 4;
 
 	std::uint32_t h1 = last.hash;
 
@@ -132,7 +133,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 	//----------
 	// body
 
-	const std::uint32_t* blocks = (const std::uint32_t*)(data + nblocks * 4);
+	const std::uint32_t* blocks = (const std::uint32_t*)(data + len4);
 
 	for (std::int32_t i = -nblocks; i; i++) {
 		std::uint32_t k1 = getblock32(blocks, i);
@@ -149,7 +150,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 	//----------
 	// tail
 
-	const uint8_t* tail = (const uint8_t*)(data + nblocks * 4);
+	const uint8_t* tail = (const uint8_t*)(data + len4);
 
 	std::uint32_t k1 = 0;
 
@@ -175,6 +176,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 
 	const std::uint8_t* data = (const std::uint8_t*)key;
 	const long nblocks       = static_cast<long>(len / 16);
+	const std::size_t len4   = static_cast<std::size_t>(nblocks) * 16;
 
 	std::uint64_t& h1 = std::get<0>(last.hash);
 	std::uint64_t& h2 = std::get<1>(last.hash);
@@ -213,7 +215,7 @@ inline void murmur3_context(const void* key, std::size_t len,
 	//----------
 	// tail
 
-	const std::uint8_t* tail = (const std::uint8_t*)(data + nblocks * 16);
+	const std::uint8_t* tail = (const std::uint8_t*)(data + len4);
 
 	std::uint64_t k1 = 0;
 	std::uint64_t k2 = 0;
