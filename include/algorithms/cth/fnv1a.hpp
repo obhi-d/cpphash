@@ -14,7 +14,7 @@ struct const_string_fnv1a {
 	    : p(a), sz(N) {}
 
 	constexpr char operator[](std::size_t n) const {
-		return n < sz ? p[n] : throw std::out_of_range("");
+		return n < sz ? p[n] : 0;
 	}
 
 	constexpr std::size_t size() const { return sz; }
