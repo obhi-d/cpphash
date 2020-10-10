@@ -13,7 +13,7 @@ inline result_t<general::wyhash64> compute(general::wyhash64 seed,
                                            const void* source,
                                            std::size_t len) {
 	context_t<general::wyhash64> storage = {seed.seed};
-	return wyhash(source, len, storage.hash);
+	return wyhash(source, len, storage.hash, _wyp);
 }
 
 // Retrieve hash stored in incremental hash computation
@@ -27,12 +27,12 @@ template <typename value_type>
 inline void append(context_t<general::wyhash64>& object,
                    const value_type& value) {
 	object.hash =
-	    wyhash64(object.hash, wyhash(&value, sizeof(value), 0xaaaaaaaa));
+	    wyhash64(object.hash, wyhash(&value, sizeof(value), 0xaaaaaaaa, _wyp));
 }
 
 inline void append(context_t<general::wyhash64>& object, const void* source,
                    std::size_t len) {
-	object.hash = wyhash64(object.hash, wyhash(source, len, 0xaaaaaaaa));
+	object.hash = wyhash64(object.hash, wyhash(source, len, 0xaaaaaaaa, _wyp));
 }
 
 } // namespace cpphash
